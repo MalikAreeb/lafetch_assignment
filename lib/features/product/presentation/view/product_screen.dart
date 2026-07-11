@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lafetch_assignment/features/product/presentation/providers/product_provider.dart';
 import 'package:lafetch_assignment/features/product/presentation/viewmodel/product_viewmodel.dart';
+import 'package:lafetch_assignment/features/product/presentation/widgets/category_shimmer.dart';
 import 'package:lafetch_assignment/features/product/presentation/widgets/product_card.dart';
+import 'package:lafetch_assignment/features/product/presentation/widgets/product_grid_shimmer.dart';
 import '../viewmodel/product_state.dart';
 
 class ProductListingScreen extends ConsumerWidget {
@@ -31,18 +33,13 @@ class ProductListingScreen extends ConsumerWidget {
           // Category chips
           categoriesAsync.when(
             data: (categories) => _buildCategoryChips(ref, categories),
-            loading: () => const SizedBox(
-              height: 50,
-              child: Center(child: CircularProgressIndicator()),
-            ),
+            loading: () => const CategoryShimmer(), // ← Shimmer for categories
             error: (err, stack) => const SizedBox.shrink(),
           ),
           // Product grid
           Expanded(
             child: switch (state) {
-              ProductListLoading() => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              ProductListLoading() => const ProductGridShimmer(),
               ProductListLoaded(products: final products) => GridView.builder(
                 padding: const EdgeInsets.all(12),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

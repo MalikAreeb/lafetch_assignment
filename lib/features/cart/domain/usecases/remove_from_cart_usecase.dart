@@ -1,4 +1,4 @@
-import 'package:lafetch_assignment/features/cart/domain/repo/cart_repo.dart';
+import 'package:lafetch_assignment/features/cart/data/repo/cart_repo.dart';
 // ← Interface, not implementation
 
 class RemoveFromCartUseCase {

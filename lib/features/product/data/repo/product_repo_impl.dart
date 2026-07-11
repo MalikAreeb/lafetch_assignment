@@ -1,8 +1,8 @@
 import 'package:lafetch_assignment/core/error/exceptions.dart';
 import 'package:lafetch_assignment/core/network/dio_client.dart';
 import 'package:lafetch_assignment/features/product/domain/entities/product.dart';
-import 'package:lafetch_assignment/features/product/domain/repo/product_repo.dart';
-import '../../data/model/product_model.dart';
+import 'package:lafetch_assignment/features/product/data/repo/product_repo.dart';
+import '../model/product_model.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final DioClient dioClient;

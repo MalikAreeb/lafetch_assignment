@@ -1,4 +1,4 @@
-import 'package:lafetch_assignment/features/cart/domain/repo/cart_repo.dart';
+import 'package:lafetch_assignment/features/cart/data/repo/cart_repo.dart';
 
 import '../../domain/entities/cart_item.dart';
 
@@ -20,7 +20,7 @@ class CartRepositoryImpl implements CartRepository {
       // If exists, increment quantity
       _cartItems[existingIndex].quantity += item.quantity;
     } else {
-      // If not exists, add new item
+      // If not exists, add new ite
       _cartItems.add(item);
     }
   }

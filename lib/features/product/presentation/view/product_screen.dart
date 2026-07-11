@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lafetch_assignment/features/product/presentation/providers/product_provider.dart';
+import 'package:lafetch_assignment/features/product/presentation/view/product_detail.dart';
 import 'package:lafetch_assignment/features/product/presentation/viewmodel/product_viewmodel.dart';
 import 'package:lafetch_assignment/features/product/presentation/widgets/category_shimmer.dart';
 import 'package:lafetch_assignment/features/product/presentation/widgets/product_card.dart';
@@ -53,7 +54,14 @@ class ProductListingScreen extends ConsumerWidget {
                   return ProductCard(
                     product: products[index],
                     onTap: () {
-                      // Navigate to product detail
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProductDetailScreen(
+                            productId: products[index].id,
+                          ),
+                        ),
+                      );
                     },
                   );
                 },

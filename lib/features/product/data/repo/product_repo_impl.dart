@@ -1,7 +1,7 @@
 import 'package:lafetch_assignment/core/error/exceptions.dart';
 import 'package:lafetch_assignment/core/network/dio_client.dart';
 import 'package:lafetch_assignment/features/product/domain/entities/product.dart';
-import 'package:lafetch_assignment/features/product/data/repo/product_repo.dart';
+import 'package:lafetch_assignment/features/product/domain/repositories/product_repository.dart';
 import '../model/product_model.dart';
 
 class ProductRepositoryImpl implements ProductRepository {

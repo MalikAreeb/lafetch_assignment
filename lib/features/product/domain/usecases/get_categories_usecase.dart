@@ -1,4 +1,4 @@
-import 'package:lafetch_assignment/features/product/data/repo/product_repo.dart';
+import 'package:lafetch_assignment/features/product/domain/repositories/product_repository.dart';
 
 class GetCategoriesUseCase {
   final ProductRepository repository;

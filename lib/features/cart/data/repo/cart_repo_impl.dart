@@ -1,4 +1,4 @@
-import 'package:lafetch_assignment/features/cart/data/repo/cart_repo.dart';
+import 'package:lafetch_assignment/features/cart/domain/repositories/cart_repository.dart';
 
 import '../../domain/entities/cart_item.dart';
 

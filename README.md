@@ -1,15 +1,26 @@
 ## State Management
-[Riverpod — why you chose it, brief mention of your Provider → Riverpod
-evolution if relevant, what provider types you used and why
-(Provider, NotifierProvider, FutureProvider) and where]
+
+This project uses **Riverpod** for state management, chosen for:
+- No `BuildContext` dependency — providers can be read from anywhere in the app
+- Compile-safe — provider errors are caught at compile time, not runtime
+- Easily testable without needing a widget tree
+
+**Provider types used:**
+- `Provider` — dependency injection for repositories and use cases
+- `NotifierProvider` — stateful data with multiple states (product list loading/loaded/error, cart contents, selected category filter)
+- `FutureProvider` — one-time async fetches (product categories)
+
+**Example flow:**
+`ProductListViewModel` (a `Notifier`) calls `GetProductsUseCase` and exposes `ProductListLoading`, `ProductListLoaded`, or `ProductListError` states to the UI, which reacts using a `switch` statement to render the corresponding screen.
 
 ## Key Technical Decisions
-[Bullet list — things worth calling out:
-- Cart persistence (in-memory, per session, per spec)
-- Exception handling approach (typed exceptions, user-friendly messages)
-- Category filtering (client-side vs re-fetch, and why)
-- Responsive grid (LayoutBuilder-based column count)
-- Anything else you made a deliberate call on]
+
+- **Cart persistence**: In-memory only, per session (as specified) — no local database needed since data doesn't need to survive app restarts.
+- **Exception handling**: Custom typed exceptions (`ServerException`, `NetworkException`) extending a shared `AppException` base class, with user-friendly messages shown in the UI while technical details are logged separately.
+- **Category filtering**: Done client-side on the already-fetched product list, avoiding unnecessary repeated API calls.
+- **Responsive grid**: Column count adapts to screen width using `LayoutBuilder`, with a max content width on larger screens to avoid an overly stretched layout on desktop/web.
+- **Repository pattern**: Abstract repository interfaces in the domain layer, concrete implementations in the data layer — allows swapping data sources (e.g., adding caching or a different API) without touching business logic or UI.
+
 
 ## Getting Started
 
@@ -33,9 +44,7 @@ Then open `http://localhost:8080`
 ## Screenshots
 [Add PLP, PDP, Cart screenshots here once written]
 
-## Known Limitations / Future Improvements
-[Optional — anything you'd do differently with more time,
-shows self-awareness, e.g. tests, offline caching, etc.]
+
 
 
 

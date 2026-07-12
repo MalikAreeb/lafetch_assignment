@@ -60,7 +60,7 @@ lib/
 ## Getting Started
 
 ### Prerequisites
-- Flutter SDK 3.12.0
+- Flutter SDK 3.22.0 or higher
 - Docker (for containerized run)
 
 ### Run Locally

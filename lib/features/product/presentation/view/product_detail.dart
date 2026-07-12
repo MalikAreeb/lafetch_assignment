@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lafetch_assignment/features/cart/domain/entities/cart_item.dart';
 import 'package:lafetch_assignment/features/product/presentation/viewmodel/product_detail_viewmodel.dart';
 import 'package:lafetch_assignment/features/product/presentation/viewmodel/product_detail_state.dart';
 import 'package:lafetch_assignment/features/product/presentation/widgets/product_detail_shimmer.dart';
+import '../../../../core/theme/theme.dart';
 import '../../../cart/presentation/providers/cart_provider.dart';
 import '../../../cart/presentation/view/cart_screen.dart';
 import '../../../cart/presentation/viewmodel/cart_state.dart';
@@ -89,68 +91,94 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
 
   Widget _buildProductDetail(Product product) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image
-          SizedBox(
+          // Image block with its own background
+          Container(
             width: double.infinity,
-            height: 300,
-            child: Image.network(product.image, fit: BoxFit.contain),
-          ),
-          const SizedBox(height: 16),
-
-          // Title
-          Text(
-            product.title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-
-          // Price
-          Text(
-            '\$${product.price.toStringAsFixed(2)}',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
+            height: 320,
+            color: AppColors.surface,
+            child: CachedNetworkImage(
+              imageUrl: product.image,
+              fit: BoxFit.contain,
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
-          const SizedBox(height: 12),
 
-          // Description
-          Text(
-            product.description,
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
-          ),
-          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Category tag
+                Text(
+                  product.category.toUpperCase(),
+                  style: AppTextStyles.caption,
+                ),
+                const SizedBox(height: 6),
 
-          // Add to Cart Button
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                final cartItem = CartItem(
-                  id: product.id,
-                  title: product.title,
-                  price: product.price,
-                  imageUrl: product.image,
-                  quantity: 1,
-                );
-                ref.read(cartViewModelProvider.notifier).addItem(cartItem);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Added to cart'),
-                    duration: Duration(seconds: 2),
+                // Title
+                Text(product.title, style: AppTextStyles.heading1),
+                const SizedBox(height: 10),
+
+                // Rating row
+                Row(
+                  children: [
+                    Icon(Icons.star, color: AppColors.secondary, size: 18),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${product.rating}  (${product.ratingCount} reviews)',
+                      style: AppTextStyles.caption,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Price
+                Text(
+                  '\$${product.price.toStringAsFixed(2)}',
+                  style: AppTextStyles.price.copyWith(fontSize: 22),
+                ),
+
+                const Divider(height: 32, color: AppColors.divider),
+
+                // Description label
+                Text('Description', style: AppTextStyles.heading2),
+                const SizedBox(height: 8),
+                Text(product.description, style: AppTextStyles.body),
+
+                const SizedBox(height: 28),
+
+                // Add to Cart button
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final cartItem = CartItem(
+                        id: product.id,
+                        title: product.title,
+                        price: product.price,
+                        imageUrl: product.image,
+                        quantity: 1,
+                      );
+                      ref
+                          .read(cartViewModelProvider.notifier)
+                          .addItem(cartItem);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Added to cart'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    child: const Text('Add to Cart'),
                   ),
-                );
-              },
-              child: const Text(
-                'Add to Cart',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+                ),
+              ],
             ),
           ),
         ],

@@ -20,7 +20,6 @@ class ProductListingScreen extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider);
     final cartState = ref.watch(cartViewModelProvider);
 
-    
     return Scaffold(
       appBar: AppBar(
         title: const Text('La-Fetch'),
@@ -99,7 +98,38 @@ class ProductListingScreen extends ConsumerWidget {
                 },
               ),
               ProductListError(message: final message) => Center(
-                child: Text('Error: $message'),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 80,
+                        color: Colors.red[400],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Error: $message',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red[600],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () {
+                          ref
+                              .read(productListViewModelProvider.notifier)
+                              .loadProducts();
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             },
           ),

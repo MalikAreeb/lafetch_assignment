@@ -25,7 +25,15 @@ class ProductListViewModel extends Notifier<ProductListState> {
       _filterByCategory(ref.read(selectedCategoryProvider));
       state = ProductListLoaded(_allProducts);
     } catch (e) {
-      state = ProductListError(e is ServerException ? e.message : e.toString());
+      String message;
+      if (e is ServerException) {
+        message = e.message;
+      } else if (e is NetworkException) {
+        message = e.message;
+      } else {
+        message = 'Something went wrong. Please try again.';
+      }
+      state = ProductListError(message);
     }
   }
 

@@ -17,9 +17,15 @@ class ProductDetailViewModel extends Notifier<ProductDetailState> {
       final product = await getProductByIdUseCase(productId);
       state = ProductDetailLoaded(product);
     } catch (e) {
-      state = ProductDetailError(
-        e is ServerException ? e.message : e.toString(),
-      );
+      String message;
+      if (e is ServerException) {
+        message = e.message;
+      } else if (e is NetworkException) {
+        message = e.message;
+      } else {
+        message = 'Something went wrong. Please try again.';
+      }
+      state = ProductDetailError(message);
     }
   }
 }

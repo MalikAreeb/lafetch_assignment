@@ -72,26 +72,33 @@ class ProductListingScreen extends ConsumerWidget {
           Expanded(
             child: switch (state) {
               ProductListLoading() => const ProductGridShimmer(),
-              ProductListLoaded(products: final products) => GridView.builder(
-                padding: const EdgeInsets.all(12),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 0.77,
-                ),
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  return ProductCard(
-                    product: products[index],
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ProductDetailScreen(
-                            productId: products[index].id,
-                          ),
-                        ),
+              ProductListLoaded(products: final products) => LayoutBuilder(
+                builder: (context, constraints) {
+                  final crossAxisCount = (constraints.maxWidth / 220)
+                      .floor()
+                      .clamp(2, 6);
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(12),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 0.77,
+                    ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      return ProductCard(
+                        product: products[index],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ProductDetailScreen(
+                                productId: products[index].id,
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   );

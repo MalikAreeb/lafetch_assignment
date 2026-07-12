@@ -154,6 +154,9 @@ class CartScreen extends ConsumerWidget {
     WidgetRef ref,
     BuildContext context,
   ) {
+    print(
+      'Total Price: $totalPrice',
+    ); // Debugging line to check the total price
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

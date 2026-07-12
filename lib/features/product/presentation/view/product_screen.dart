@@ -7,6 +7,8 @@ import 'package:lafetch_assignment/features/product/presentation/viewmodel/produ
 import 'package:lafetch_assignment/features/product/presentation/widgets/category_shimmer.dart';
 import 'package:lafetch_assignment/features/product/presentation/widgets/product_card.dart';
 import 'package:lafetch_assignment/features/product/presentation/widgets/product_grid_shimmer.dart';
+import '../../../cart/presentation/viewmodel/cart_state.dart';
+import '../../../cart/presentation/viewmodel/cart_viewmodel.dart';
 import '../viewmodel/product_state.dart';
 
 class ProductListingScreen extends ConsumerWidget {
@@ -16,19 +18,46 @@ class ProductListingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(productListViewModelProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
+    final cartState = ref.watch(cartViewModelProvider);
 
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('La-Fetch'),
         actions: [
           // Cart icon with badge
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => const CartScreen()));
-            },
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CartScreen()),
+                  );
+                },
+              ),
+              if (cartState is CartLoaded && cartState.items.isNotEmpty)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${cartState.items.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),

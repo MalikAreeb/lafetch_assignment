@@ -5,6 +5,9 @@ import 'package:lafetch_assignment/features/product/presentation/viewmodel/produ
 import 'package:lafetch_assignment/features/product/presentation/viewmodel/product_detail_state.dart';
 import 'package:lafetch_assignment/features/product/presentation/widgets/product_detail_shimmer.dart';
 import '../../../cart/presentation/providers/cart_provider.dart';
+import '../../../cart/presentation/view/cart_screen.dart';
+import '../../../cart/presentation/viewmodel/cart_state.dart';
+import '../../../cart/presentation/viewmodel/cart_viewmodel.dart';
 import '../../domain/entities/product.dart';
 
 class ProductDetailScreen extends ConsumerStatefulWidget {
@@ -31,9 +34,47 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productDetailViewModelProvider);
+    final cartState = ref.watch(cartViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Product Details')),
+      appBar: AppBar(
+        title: const Text('Product Details'),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CartScreen()),
+                  );
+                },
+              ),
+              if (cartState is CartLoaded && cartState.items.isNotEmpty)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${cartState.items.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
       body: switch (state) {
         ProductDetailLoading() => const ProductDetailShimmer(),
         ProductDetailLoaded(product: final product) => _buildProductDetail(
@@ -98,7 +139,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                   imageUrl: product.image,
                   quantity: 1,
                 );
-                ref.read(addToCartUseCaseProvider).call(cartItem);
+                ref.read(cartViewModelProvider.notifier).addItem(cartItem);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Added to cart'),

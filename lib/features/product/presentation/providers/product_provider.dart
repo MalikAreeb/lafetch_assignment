@@ -5,7 +5,34 @@ import 'package:lafetch_assignment/features/product/data/repo/product_repo_impl.
 import 'package:lafetch_assignment/features/product/domain/usecases/get_categories_usecase.dart';
 import 'package:lafetch_assignment/features/product/domain/usecases/get_product_by_id_usecase.dart';
 import 'package:lafetch_assignment/features/product/domain/usecases/get_product_usecase.dart';
-import 'package:flutter_riverpod/legacy.dart';
+
+// Category Selection State Management
+class SelectedCategoryNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void selectCategory(String? category) {
+    state = category;
+  }
+}
+
+final selectedCategoryProvider =
+    NotifierProvider<SelectedCategoryNotifier, String?>(() {
+      return SelectedCategoryNotifier();
+    });
+
+final categoriesProvider = FutureProvider<List<String>>((ref) async {
+  final getCategoriesUseCase = ref.watch(getCategoriesUseCaseProvider);
+  return getCategoriesUseCase();
+});
+
+
+
+
+
+
+
+// Product Repository and Use Cases
 
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
   final dioClient = ref.watch(dioClientProvider);
@@ -25,10 +52,4 @@ final getProductByIdUseCaseProvider = Provider<GetProductByIdUseCase>((ref) {
 final getCategoriesUseCaseProvider = Provider<GetCategoriesUseCase>((ref) {
   final repo = ref.watch(productRepositoryProvider);
   return GetCategoriesUseCase(repo);
-});
-
-final selectedCategoryProvider = StateProvider<String?>((ref) => null);
-final categoriesProvider = FutureProvider<List<String>>((ref) async {
-  final getCategoriesUseCase = ref.watch(getCategoriesUseCaseProvider);
-  return getCategoriesUseCase();
 });
